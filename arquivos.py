@@ -7,7 +7,7 @@ try:
     with open(f"{os.environ['HOME']}/.config/spotify-downloader/config.json") as arquivo_config:
         config = json.load(arquivo_config)
 except:
-    with open(f"/storage/emulated/0/Configurações/config.json") as arquivo_config:
+    with open(f"/storage/emulated/0/Músicas/Configurações/config.json") as arquivo_config:
         config = json.load(arquivo_config)
 
 match config["OS"]:
@@ -26,15 +26,19 @@ def criar_pastas():
 
     match config["OS"]:
         case "linux":
-            if not os.path.isdir(f"{caminho_arquivo_inicio}/.config/spotify-downloader"):
-                os.makedirs(f"{caminho_arquivo_inicio}/.config/spotify-downloader")
+            caminho_config = f"{caminho_arquivo_inicio}/.config/spotify-downloader"
+            if not os.path.isdir(caminho_config):
+                os.makedirs(caminho_config)
         case "android":
-            if not os.path.isdir(f"{caminho_arquivo_inicio}/Configuração"):
-                os.makedirs(f"{caminho_arquivo_inicio}/Configuração")
+            caminho_config = f"{caminho_arquivo_inicio}/Músicas/Configurações"
+            if not os.path.isdir(caminho_config):
+                os.makedirs(caminho_config)
 
-def criar_config():
-    if not os.path.isfile(f"{os.environ['HOME']}/.config/spotify-downloader/config.json"):
-        config_arquivo = open(f"{os.environ['HOME']}/.config/spotify-downloader/config.json", "w")
+    return caminho_config
+
+def criar_config(caminho_config):
+    if not os.path.isfile(f"{caminho_config}/config.json"):
+        config_arquivo = open(f"{caminho_config}/config.json", "w")
         config_padrao = {
             "OS": "",
             "client_id": "",
