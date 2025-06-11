@@ -1,11 +1,10 @@
 import os
 import requests
 import json
-from arquivos import baixar_mp3, config, caminho_arquivo_inicio
-from api import sp
+import arquivos
 
 # Retorna todas as músicas da playlist em uma lista
-def pegar_musicas_playlist(id, i):
+def pegar_musicas_playlist(sp, id, i):
     playlist = sp.playlist_tracks(id[i])
     faixas = playlist['items']
     while playlist['next']:
@@ -14,7 +13,7 @@ def pegar_musicas_playlist(id, i):
     return faixas
 
 
-def baixar_playlists():
+def baixar_playlists(sp, config, caminho_arquivo_inicio):
     playlists_all = sp.current_user_playlists()
     playlist_id = list()
     i = 0
@@ -28,7 +27,7 @@ def baixar_playlists():
         playlist_arquivo = open(f"{caminho_arquivo_inicio}/Músicas/Playlists/{playlists_all['items'][i]['name']}.m3u", "w")
 
         # Imprime as músicas da playlist e baixa
-        for playlist_itens in pegar_musicas_playlist(playlist_id, i):
+        for playlist_itens in pegar_musicas_playlist(sp, playlist_id, i):
             musica = playlist_itens['track']
             caminho_arquivo = f"{caminho_arquivo_inicio}/Músicas/Artistas/{musica['artists'][0]['name']}/{musica['album']['name']}/{musica['name']}"
 
@@ -38,7 +37,7 @@ def baixar_playlists():
                 capa_album = None
                 if config["imagens"] == True:
                     capa_album = requests.get(musica['album']['images'][0]['url']).content
-                baixar_mp3(musica, caminho_arquivo, capa_album)
+                arquivos.baixar_mp3(musica, caminho_arquivo, capa_album)
 
             # Escreve no arquivo da playlist
             playlist_arquivo.write(f"{caminho_arquivo}.mp3\n")

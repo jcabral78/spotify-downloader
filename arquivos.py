@@ -3,51 +3,6 @@ from mutagen.id3 import ID3, TIT2, TPE1, TALB, TDRC, TRCK, APIC
 import os
 import json
 
-try:
-    with open(f"{os.environ['HOME']}/.config/spotify-downloader/config.json") as arquivo_config:
-        config = json.load(arquivo_config)
-except:
-    with open(f"/storage/emulated/0/Músicas/Configurações/config.json") as arquivo_config:
-        config = json.load(arquivo_config)
-
-match config["OS"]:
-    case "linux":
-        caminho_arquivo_inicio = f"{os.environ['HOME']}"
-    case "android":
-        caminho_arquivo_inicio = "/storage/emulated/0"
-    case _:
-        print("Erro na config: OS")
-
-def criar_pastas():
-    if not os.path.isdir(f"{caminho_arquivo_inicio}/Músicas/Artistas"):
-        os.makedirs(f"{caminho_arquivo_inicio}/Músicas/Artistas")
-    if not os.path.isdir(f"{caminho_arquivo_inicio}/Músicas/Playlists"):
-        os.makedirs(f"{caminho_arquivo_inicio}/Músicas/Playlists")
-
-    match config["OS"]:
-        case "linux":
-            caminho_config = f"{caminho_arquivo_inicio}/.config/spotify-downloader"
-            if not os.path.isdir(caminho_config):
-                os.makedirs(caminho_config)
-        case "android":
-            caminho_config = f"{caminho_arquivo_inicio}/Músicas/Configurações"
-            if not os.path.isdir(caminho_config):
-                os.makedirs(caminho_config)
-
-    return caminho_config
-
-def criar_config(caminho_config):
-    if not os.path.isfile(f"{caminho_config}/config.json"):
-        config_arquivo = open(f"{caminho_config}/config.json", "w")
-        config_padrao = {
-            "OS": "",
-            "client_id": "",
-            "client_secret": "",
-            "imagens": False
-        }
-        config_arquivo.write(json.dumps(config_padrao, indent=4))
-        config_arquivo.close()
-
 def baixar_mp3(musica, caminho_arquivo, capa_album):
     # Opções para download
     ydl_opts = {
@@ -78,3 +33,30 @@ def baixar_mp3(musica, caminho_arquivo, capa_album):
     if not capa_album == None:
         audio.add(APIC(encoding = 3, mime = 'image/jpeg', type = 3, data = capa_album))
     audio.save()
+
+def criar_config(caminho_config, caminho_config_todos):
+    print("Escolha o seu sistema")
+    print("1) Linux")
+    print("2) Android")
+    OS = int(input())
+    OS_str = ["linux", "android"]
+    caminho_config = caminho_config_todos[OS - 1]
+    os.makedirs(caminho_config)
+    config_arquivo = open(f"{caminho_config}", "w")
+    config_padrao = {
+        "OS": OS_str[OS - 1],
+        "client_id": "",
+        "client_secret": "",
+        "imagens": False
+    }
+    config_arquivo.write(json.dumps(config_padrao, indent=4))
+    config_arquivo.close()
+    print(f"Configuração criada em: {caminho_config}")
+    print("Por favor, mude o que for necessário e tente novamente")
+    exit(0)
+    
+def criar_pastas(caminho_arquivo_inicio):
+    if not os.path.isdir(f"{caminho_arquivo_inicio}/Músicas/Artistas"):
+        os.makedirs(f"{caminho_arquivo_inicio}/Músicas/Artistas")
+    if not os.path.isdir(f"{caminho_arquivo_inicio}/Músicas/Playlists"):
+        os.makedirs(f"{caminho_arquivo_inicio}/Músicas/Playlists")

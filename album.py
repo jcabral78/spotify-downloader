@@ -1,18 +1,17 @@
 import os
 import requests
-from arquivos import baixar_mp3, config, caminho_arquivo_inicio
-from api import sp
+import arquivos
 
 # Retorna todas as músicas de um álbum em uma lista
-def pegar_musicas_album(album_id):
+def pegar_musicas_album(sp, album_id):
     album_faixas = sp.album_tracks(album_id=album_id)
     return album_faixas['items']
 
-def baixar_album(album_url):
+def baixar_album(sp, config, caminho_arquivo_inicio, album_url):
     album = sp.album(album_id=album_url)
 
     # Imprime as músicas da playlist e baixa
-    for musica in pegar_musicas_album(album['id']):
+    for musica in pegar_musicas_album(sp, album['id']):
         musica['album'] = {
             "name": album['name'],
             "release_date": album['release_date']
@@ -25,4 +24,4 @@ def baixar_album(album_url):
             capa_album = None
             if config["imagens"] == True:
                 capa_album = requests.get(album['images'][0]['url']).content
-            baixar_mp3(musica, caminho_arquivo)
+            arquivos.baixar_mp3(musica, caminho_arquivo, capa_album)
