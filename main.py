@@ -6,27 +6,26 @@ import arquivos
 import playlist
 import album
 
+caminho_config = ""
 caminho_config_todos = [
-    f"{os.environ['HOME']}/.config/spotify-downloader/config.json",
-    f"/home/userbase/sdcard/Músicas/Configurações/config.json"
+    f"{os.environ['HOME']}/.config/spotify-downloader",
+    f"/home/userbase/sdcard/Músicas/Configurações"
 ]
 
 for i in range(len(caminho_config_todos)):
-    if os.path.isfile(caminho_config_todos[i]):
-        caminho_config = caminho_config_todos[i]
+    if os.path.isfile(f"{caminho_config_todos[i]}/config.json"):
+        caminho_config = f"{caminho_config_todos[i]}/config.json"
         break
 
-while True:
-    try:
-        with open(f"{caminho_config}") as arquivo_config:
-            config = json.load(arquivo_config)
-        break
-    except:
-        arquivos.criar_config(caminho_config, caminho_config_todos)
+try:
+    with open(caminho_config) as arquivo_config:
+        config = json.load(arquivo_config)
+except:
+    arquivos.criar_config(caminho_config, caminho_config_todos)
 
 match config["OS"]:
     case "linux":
-        caminho_arquivo_inicio = f"{os.environ['HOME']}"
+        caminho_arquivo_inicio = os.environ['HOME']
     case "android":
         caminho_arquivo_inicio = "/home/userbase/sdcard"
     case _:

@@ -41,8 +41,8 @@ def criar_config(caminho_config, caminho_config_todos):
     OS = int(input())
     OS_str = ["linux", "android"]
     caminho_config = caminho_config_todos[OS - 1]
-    os.makedirs(caminho_config)
-    config_arquivo = open(f"{caminho_config}", "w")
+    os.makedirs(f"{caminho_config}")
+    config_arquivo = open(f"{caminho_config}/config.json", "w")
     config_padrao = {
         "OS": OS_str[OS - 1],
         "client_id": "",
