@@ -6,21 +6,31 @@ import arquivos
 import playlist
 import album
 
-caminho_config = ""
-caminho_config_todos = [
+caminho_config_home = [
     f"{os.environ['HOME']}/.config/spotify-downloader",
 ]
 
-for i in range(len(caminho_config_todos)):
-    if os.path.isfile(f"{caminho_config_todos[i]}/config.json"):
-        caminho_config = f"{caminho_config_todos[i]}/config.json"
+id_os_config = {
+    "linux": 0
+}
+
+for i in range(len(caminho_config_home)):
+    if os.path.isdir(f"{caminho_config_home[i]}"):
+        caminho_config = f"{caminho_config_home[i]}/config.json"
+        caminho_config_api = f"{caminho_config_home[i]}/api.json"
         break
 
 try:
     with open(caminho_config) as arquivo_config:
         config = json.load(arquivo_config)
 except:
-    arquivos.criar_config(caminho_config, caminho_config_todos)
+    arquivos.criar_config(caminho_config_home)
+
+try:
+    with open(caminho_config_api) as arquivo_config_api:
+        config_api = json.load(arquivo_config_api)
+except:
+    arquivos.criar_config_api(caminho_config_home[id_os_config[config["OS"]]])
 
 match config["OS"]:
     case "linux":
@@ -33,8 +43,8 @@ match config["OS"]:
     case "linux":
         cache = f"{caminho_arquivo_inicio}/.cache/spotifyAPItoken"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config["client_id"],
-                                               client_secret=config["client_secret"],
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
+                                               client_secret=config_api["client_secret"],
                                                redirect_uri="http://127.0.0.1:3000",
                                                scope="playlist-read-private",
                                                cache_path=cache))

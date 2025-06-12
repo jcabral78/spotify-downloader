@@ -34,24 +34,46 @@ def baixar_mp3(musica, caminho_arquivo, capa_album):
         audio.add(APIC(encoding = 3, mime = 'image/jpeg', type = 3, data = capa_album))
     audio.save()
 
-def criar_config(caminho_config, caminho_config_todos):
+
+def criar_config(caminho_config_home):
+    OS_str = ["linux"]
+
     print("Escolha o seu sistema")
     print("1) Linux")
     OS = int(input())
-    OS_str = ["linux"]
-    caminho_config = caminho_config_todos[OS - 1]
+    OS = OS - 1
+
+    caminho_config = caminho_config_home[OS]
     os.makedirs(f"{caminho_config}")
-    config_arquivo = open(f"{caminho_config}/config.json", "w")
+
     config_padrao = {
-        "OS": OS_str[OS - 1],
-        "client_id": "",
-        "client_secret": "",
+        "OS": OS_str[OS],
         "imagens": False
     }
+
+    caminho_config = caminho_config + "/config.json"
+    config_arquivo = open(caminho_config, "w")
     config_arquivo.write(json.dumps(config_padrao, indent=4))
     config_arquivo.close()
+
     print(f"Configuração criada em: {caminho_config}")
-    print("Por favor, mude o que for necessário e tente novamente")
+    exit(0)
+
+def criar_config_api(caminho_config_api):
+    client_id = input("Escreva o client id: ")
+    client_secret = input("Escreva o client secret: ")
+
+    config_api = {
+        "client_id": client_id,
+        "client_secret": client_secret
+    }
+
+    caminho_config_api = caminho_config_api + "/api.json"
+    config_arquivo = open(caminho_config_api, "w")
+    config_arquivo.write(json.dumps(config_api, indent=4))
+    config_arquivo.close()
+
+    print(f"Configuração criada em: {caminho_config_api}")
     exit(0)
     
 def criar_pastas(caminho_arquivo_inicio):
