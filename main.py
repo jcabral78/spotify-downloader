@@ -67,6 +67,11 @@ match opcao:
     case _:
         print("Erro de input")
 
-for album_config in config["album"]:
-    url = album_config["link"]
-    album.baixar_album(sp, config, caminho_arquivo_inicio, url)
+try:
+    for album_config in config["album"]:
+        url = album_config["link"]
+
+        print(f"Baixando o álbum: {album_config['nome']}")
+        album.baixar_album(sp, config, caminho_arquivo_inicio, url)
+except:
+    pass
