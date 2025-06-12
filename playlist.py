@@ -17,6 +17,7 @@ def baixar_playlists(sp, config, caminho_arquivo_inicio):
     playlists_all = sp.current_user_playlists()
     playlist_id = list()
     i = 0
+    url_youtube = ""
 
     # Pega o id de cada playlist
     for id in playlists_all['items']:
@@ -37,7 +38,7 @@ def baixar_playlists(sp, config, caminho_arquivo_inicio):
                 capa_album = None
                 if config["imagens"] == True:
                     capa_album = requests.get(musica['album']['images'][0]['url']).content
-                arquivos.baixar_mp3(musica, caminho_arquivo, capa_album)
+                arquivos.baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube)
 
             # Escreve no arquivo da playlist
             playlist_arquivo.write(f"{caminho_arquivo}.mp3\n")

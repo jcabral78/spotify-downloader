@@ -3,7 +3,7 @@ from mutagen.id3 import ID3, TIT2, TPE1, TALB, TDRC, TRCK, APIC
 import os
 import json
 
-def baixar_mp3(musica, caminho_arquivo, capa_album):
+def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
     # Opções para download
     ydl_opts = {
         'format': 'bestaudio/best',
@@ -18,6 +18,9 @@ def baixar_mp3(musica, caminho_arquivo, capa_album):
 
     # Query de busca
     query = f"ytsearch: {musica['name']} {musica['artists'][0]['name']}"
+
+    if url_youtube != "":
+        query = url_youtube
 
     # Download do mp3
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:

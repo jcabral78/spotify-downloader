@@ -5,6 +5,7 @@ import json
 import arquivos
 import playlist
 import album
+import outros
 
 caminho_config_home = [
     f"{os.environ['HOME']}/.config/spotify-downloader",
@@ -56,6 +57,12 @@ print("1) Álbum")
 print("2) Outros")
 opcao = int(input())
 
+try:
+    for musica_config in config["musica"]:
+        outros.baixar_musica(sp, config, caminho_arquivo_inicio, musica_config)
+except:
+    pass
+
 match opcao:
     case 1:
         url = input("Escreva o URL de um álbum: ")
@@ -69,7 +76,7 @@ match opcao:
 
 try:
     for album_config in config["album"]:
-        url = album_config["link"]
+        url = album_config["url"]
 
         print(f"Baixando o álbum: {album_config['nome']}")
         album.baixar_album(sp, config, caminho_arquivo_inicio, url)

@@ -9,6 +9,7 @@ def pegar_musicas_album(sp, album_id):
 
 def baixar_album(sp, config, caminho_arquivo_inicio, album_url):
     album = sp.album(album_id=album_url)
+    url_youtube = ""
 
     # Imprime as músicas da playlist e baixa
     for musica in pegar_musicas_album(sp, album['id']):
@@ -24,4 +25,4 @@ def baixar_album(sp, config, caminho_arquivo_inicio, album_url):
             capa_album = None
             if config["imagens"] == True:
                 capa_album = requests.get(album['images'][0]['url']).content
-            arquivos.baixar_mp3(musica, caminho_arquivo, capa_album)
+            arquivos.baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube)
