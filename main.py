@@ -53,7 +53,7 @@ arquivos.criar_pastas(caminho_arquivo_inicio)
 
 print("O que você quer baixar?")
 print("1) Álbum")
-print("2) Playlist")
+print("2) Outros")
 opcao = int(input())
 
 match opcao:
@@ -66,3 +66,7 @@ match opcao:
 
     case _:
         print("Erro de input")
+
+for album_config in config["album"]:
+    url = album_config["link"]
+    album.baixar_album(sp, config, caminho_arquivo_inicio, url)

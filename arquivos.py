@@ -44,7 +44,9 @@ def criar_config(caminho_config_home):
     OS = OS - 1
 
     caminho_config = caminho_config_home[OS]
-    os.makedirs(f"{caminho_config}")
+
+    if not os.path.isdir(caminho_config):
+        os.makedirs(caminho_config)
 
     config_padrao = {
         "OS": OS_str[OS],
