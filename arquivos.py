@@ -37,9 +37,8 @@ def baixar_mp3(musica, caminho_arquivo, capa_album):
 def criar_config(caminho_config, caminho_config_todos):
     print("Escolha o seu sistema")
     print("1) Linux")
-    print("2) Android")
     OS = int(input())
-    OS_str = ["linux", "android"]
+    OS_str = ["linux"]
     caminho_config = caminho_config_todos[OS - 1]
     os.makedirs(f"{caminho_config}")
     config_arquivo = open(f"{caminho_config}/config.json", "w")

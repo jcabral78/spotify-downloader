@@ -9,7 +9,6 @@ import album
 caminho_config = ""
 caminho_config_todos = [
     f"{os.environ['HOME']}/.config/spotify-downloader",
-    f"/home/userbase/sdcard/Músicas/Configurações"
 ]
 
 for i in range(len(caminho_config_todos)):
@@ -26,8 +25,6 @@ except:
 match config["OS"]:
     case "linux":
         caminho_arquivo_inicio = os.environ['HOME']
-    case "android":
-        caminho_arquivo_inicio = "/home/userbase/sdcard"
     case _:
         print("Erro na config: OS")
         exit(0)
@@ -35,8 +32,6 @@ match config["OS"]:
 match config["OS"]:
     case "linux":
         cache = f"{caminho_arquivo_inicio}/.cache/spotifyAPItoken"
-    case "android":
-        cache = f"{caminho_arquivo_inicio}/Músicas/.spotifyAPItoken"
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config["client_id"],
                                                client_secret=config["client_secret"],
