@@ -12,6 +12,7 @@ def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
             'preferredcodec': 'mp3',
             'preferredquality': '192'
             }],
+        'cookiefile': f'{os.environ["HOME"]}/.cache/cookies.txt',
         'outtmpl': f'{caminho_arquivo}.%(ext)s',
         'quiet': 'true'
     }
