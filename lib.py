@@ -21,31 +21,33 @@ def abrir_config():
     caminho_config_api = f"{os.environ['HOME']}/.config/spotify-downloader/api.json"
     
     # Abre o arquivo de configuração
-    try:
-        config = json.load(open(caminho_config))
-    except:
-        criar_config(caminho_config)
+    # Se não existir, cria o arquivo
+    while True:
+        if os.path.isfile(caminho_config):
+            config = json.load(open(caminho_config))
+            break
+        else:
+            criar_config(caminho_config)
     
     # Abre o arquivo de configuração da API
-    try:
-        config_api = json.load(open(caminho_config_api))
-    except:
-        criar_config_api(caminho_config_api)
+    # Se não existir, cria o arquivo
+    while True:
+        if os.path.isfile(caminho_config_api):
+            config_api = json.load(open(caminho_config_api))
+            break
+        else:
+            criar_config_api(caminho_config_api)
 
-    try:
-        # Setup da API
-        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
-                                                       client_secret=config_api["client_secret"],
-                                                       redirect_uri="http://127.0.0.1:3000",
-                                                       scope="playlist-read-private",
-                                                       cache_path=f"{os.environ['HOME']}/.cache/spotifyAPItoken"))
-    except:
-        print("Erro ao conectar com a API do Spotify")
-        exit(0)
+    # Conecta com a API
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
+                                                   client_secret=config_api["client_secret"],
+                                                   redirect_uri="http://127.0.0.1:3000",
+                                                   scope="playlist-read-private",
+                                                   cache_path=f"{os.environ['HOME']}/.cache/spotifyAPItoken"))
 
 def criar_config(caminho_config):
-    if not os.path.isdir(caminho_config):
-        os.makedirs(caminho_config)
+    if not os.path.isdir(caminho_config.removesuffix("/config.json")):
+        os.makedirs(caminho_config.removesuffix("/config.json"))
 
     config_padrao = {
         "imagens": False
@@ -56,7 +58,6 @@ def criar_config(caminho_config):
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config}")
-    exit(0)
 
 def criar_config_api(caminho_config_api):
     client_id = input("Escreva o client id: ")
@@ -72,13 +73,12 @@ def criar_config_api(caminho_config_api):
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config_api}")
-    exit(0)
 
 def baixar_album(album_url):
     album = sp.album(album_id=album_url)
     album_faixas = sp.album_tracks(album_id=album_url)
 
-    # Imprime as músicas da playlist e baixa
+    # Itera sobre as músicas do álbum
     for musica in album_faixas['items']:
         musica['album'] = {
             "name": album['name'],
@@ -115,7 +115,7 @@ def baixar_playlists():
             playlist = sp.next(playlist)
             faixas.extend(playlist['items'])
 
-        # Imprime as músicas da playlist e baixa
+        # Itera sobre as músicas da playlist
         for playlist_itens in faixas:
             musica = playlist_itens['track']
             caminho_arquivo = f"{os.environ['HOME']}/Músicas/Artistas/{musica['artists'][0]['name']}/{musica['album']['name']}/{musica['name']}"
@@ -147,7 +147,7 @@ def baixar_musica(musica_info):
         baixar_mp3(musica, caminho_arquivo, capa_album, musica_info["url-youtube"])
 
 def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube = None):
-    # Opções para download
+    # Opções de download
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
@@ -163,6 +163,7 @@ def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube = None):
     # Query de busca
     query = f"ytsearch: {musica['name']} {musica['artists'][0]['name']}"
 
+    # Checa se um URL foi definido
     if url_youtube != None:
         query = url_youtube
 
