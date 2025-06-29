@@ -1,6 +1,6 @@
 # spotify-downloader
 
-Um aplicativo que automatiza a instalação e organização de playlists locais usando o spotify.
+Um aplicativo que automatiza a instalação e organização de playlists locais usando o spotify. Atualmente só possui suporte para Linux.
 
 ## Features
 
@@ -46,12 +46,24 @@ A configuração é feita por um arquivo json.
 
 ### Dependências
 
-- python 3.13
-    - spotipy
-    - yt-dlp
-    - mutagen
-    - requests
+- python3
+- pip
+- make
+***
 
-### Setup
+Após instalar as dependências, vá para o terminal e siga estes passos para a instalação:
 
-Você precisará ir no site https://developer.spotify.com para criar um aplicativo. Após criá-lo, você precisará adicionar um Redirect URI como "http://127.0.0.1:3000". Isso é necessário pois o script vai pedir o Client ID e o Client Secret.
+    # Clonar o repositório
+    git clone https://github.com/jcabral78/spotify-downloader.git
+
+    # Entrar no diretório do projeto
+    cd spotify-downloader
+
+    # Instalar o projeto
+    make install
+
+Para mais informações nos comandos disponíveis com make, use `make help`.
+
+### Setup da API
+
+Vá para https://developer.spotify.com e crie um aplicativo no Dashboard. Após criá-lo, adicione "http://127.0.0.1:3000" no Redirect URI. O projeto vai demandar o Client ID e o Client Secret.
