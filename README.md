@@ -59,8 +59,10 @@ Após instalar as dependências, vá para o terminal e siga estes passos para a 
     # Entrar no diretório do projeto
     cd spotify-downloader
 
-    # Instalar o projeto (talvez seja necessário rodar com sudo)
-    make install
+    # Instalar o projeto
+    make setup
+    make build
+    make install # (talvez seja necessário rodar com sudo)
 
 Para mais informações nos comandos disponíveis com make, use `make help`.
 
