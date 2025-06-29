@@ -1,20 +1,20 @@
-setup: requirements.txt
+setup:
 	@echo "Criando o ambiente virtual"
 	@python -m venv venv
 	@echo "Instalando as dependências"
 	@./venv/bin/pip install -r requirements.txt
 
-build: setup
+build:
 	@echo "Instalando as dependências"
 	@./venv/bin/pip install pyinstaller
 	@echo "Construindo o binário"
 	@./venv/bin/pyinstaller --onefile --name spotify-downloader main.py
 
-install: build
+install:
 	@echo "Instalando o projeto"
 	@cp -f ./dist/spotify-downloader /usr/local/bin/
 
-run: setup
+run:
 	@./venv/bin/python main.py
 
 clean:
