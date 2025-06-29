@@ -48,6 +48,7 @@ def criar_config(caminho_config):
         os.makedirs(caminho_config.removesuffix("/config.json"))
 
     config_padrao = {
+        "navegador": "",
         "imagens": False
     }
 
@@ -56,6 +57,8 @@ def criar_config(caminho_config):
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config}")
+    print("Edite o arquivo para selecionar o seu navegador")
+    exit(0)
 
 def criar_config_api(caminho_config_api):
     client_id = input("Escreva o client id: ")
@@ -146,7 +149,7 @@ def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
             'preferredcodec': 'mp3',
             'preferredquality': '320'
             }],
-        'cookiefile': f'{os.environ["HOME"]}/.cache/cookies.txt',
+        'cookiesfrombrowser': (config["navegador"],),
         'outtmpl': f'{caminho_arquivo}.%(ext)s',
         'quiet': 'true'
     }
