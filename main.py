@@ -13,23 +13,23 @@ opcao = int(input())
 match opcao:
     case 1:
         url = input("Escreva o URL de um álbum: ")
-        lib.baixar_album(url)
+        lib.pegar_album(url)
 
     case 2:
         # Baixar músicas pela configuração
         try:
             for musica_config in lib.config["musica"]:
-                lib.baixar_musica(musica_config)
+                lib.pegar_musica(musica_config)
         except:
             pass
 
-        lib.baixar_playlists()
+        lib.pegar_playlists()
 
         # Baixar álbuns pela configuração
         try:
             for album_config in lib.config["album"]:
                 url = album_config["url"]
-                lib.baixar_album(url)
+                lib.pegar_album(url)
         except:
             pass
 
