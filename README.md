@@ -31,14 +31,14 @@ A configuração é feita por um arquivo json.
                 "nome": "Bulls on Parade",
                 "url-spotify": "https://open.spotify.com/intl-pt/track/0tZ3mElWcr74OOhKEiNz1x?si=cc34f903bd84470a",
                 "url-youtube": "https://youtu.be/DvdeE6KzrTc?si=BXmVAlEFx7ti1Bq1"
-            },
+            }
         ],
 
         "album": [
             {
                 "nome": "Toxicity",
                 "url": "https://open.spotify.com/intl-pt/album/6jWde94ln40epKIQCd8XUh"
-            },
+            }
         ]
     }
 
@@ -51,3 +51,7 @@ A configuração é feita por um arquivo json.
     - yt-dlp
     - mutagen
     - requests
+
+### Setup
+
+Você precisará ir no site https://developer.spotify.com para criar um aplicativo. Após criá-lo, você precisará adicionar um Redirect URI como "http://127.0.0.1:3000". Isso é necessário pois o script vai pedir o Client ID e o Client Secret.
