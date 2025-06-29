@@ -123,7 +123,17 @@ def pegar_musica(musica_info):
     baixar_musicas(musica, musica_info["url-youtube"])
 
 def baixar_musicas(musica, url_youtube = None, playlist = False):
-    caminho_arquivo = f"{os.environ['HOME']}/Músicas/Artistas/{musica['artists'][0]['name']}/{musica['album']['name']}/{musica['name']}"
+    nome_artista = musica['artists'][0]['name']
+    nome_album = musica['album']['name']
+    nome_musica = musica['name']
+
+    # Limpa o nome das pastas e arquivos
+    nome_artista = limpar_nome(nome_artista)
+    nome_album = limpar_nome(nome_album)
+    nome_musica = limpar_nome(nome_musica)
+    nome_limpo = f"{nome_artista}/{nome_album}/{nome_musica}"
+
+    caminho_arquivo = f"{os.environ['HOME']}/Músicas/Artistas/{nome_limpo}"
 
     # Checa se a música já foi instalada. Se não, baixa
     if not os.path.isfile(f"{caminho_arquivo}.mp3"):
@@ -139,6 +149,17 @@ def baixar_musicas(musica, url_youtube = None, playlist = False):
     # Se for uma playlist, retorna o caminho do arquivo para criar a playlist
     if playlist == True:
         return caminho_arquivo
+
+def limpar_nome(nome):
+    nome = nome.lower()
+    nome = nome.replace(" ", "_")
+    nome = nome.replace("/", "")
+    nome = nome.replace("(", "").replace(")", "")
+    nome = nome.replace("-", "")
+    nome = nome.replace(":", "")
+    nome = nome.replace("'", "")
+
+    return nome
 
 def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
     # Opções de download
