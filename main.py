@@ -16,8 +16,6 @@ match opcao:
         lib.pegar_album(url)
 
     case 2:
-        # for i in lib.config["importar"]["diretorio"]:
-            # print(os.listdir(f"{os.environ['HOME']}/.config/spotify-downloader/{i}"))
         # Baixar músicas pela configuração
         try:
             for musica_config in lib.config["musica"]:

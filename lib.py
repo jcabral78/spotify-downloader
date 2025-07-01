@@ -20,15 +20,20 @@ def abrir_config():
     caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/config.json"
     caminho_config_api = f"{os.environ['HOME']}/.config/spotify-downloader/api.json"
     
-    caminho = f"{os.environ['HOME']}/.config/spotify-downloader/"
-    
     # Abre o arquivo de configuração
     while True:
         if os.path.isfile(caminho_config):
             config = json.load(open(caminho_config))
 
-            for nome_arquivo in config["importar"]["arquivo"]:
-                a = json.load(open(caminho + nome_arquivo))
+            arquivos = list()
+            for i in config["importar"]["arquivo"]:
+                arquivos.append(i)
+
+            for i in os.listdir(f"{os.environ['HOME']}/.config/spotify-downloader/{config['importar']['diretorio'][0]}"):
+                arquivos.append(f"{config["importar"]["diretorio"][0]}/{i}")
+
+            for nome_arquivo in config["importar"]["arquivo"] and arquivos:
+                a = json.load(open(f"{os.environ['HOME']}/.config/spotify-downloader/{nome_arquivo}"))
                 try:
                     for i in a["musica"]:
                         config["musica"].append(i)
