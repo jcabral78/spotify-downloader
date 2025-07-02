@@ -17,9 +17,14 @@ A configuração é feita por um arquivo json.
 
 - navegador: Escreva o nome do seu navegador (chrome, firefox, etc) para a coleta de cookies.
 - imagens: Usado para determinar se capas de álbuns vão ou não ser instaladas.
-- musica: Usado para instalar músicas separadas e selecionar qual vídeo do youtube deve ser usado.
+- musica: Usado para instalar músicas separadas.
+    - url-spotify: Link da música no spotify.
+    - url-youtube: Link do vídeo que será usado para o download no youtube (opcional).
 - album: Usado para instalar álbuns automaticamente.
+    - url: Link do álbum no spotify.
 - importar: Usado para importar arquivos e diretórios
+    - arquivo: Importa arquivos separados.
+    - diretorio: Importa todos os arquivos em um diretório.
 
 ### Exemplo de Configuração
 
