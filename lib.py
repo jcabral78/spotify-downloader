@@ -25,8 +25,8 @@ def abrir_config():
     while True:
         if os.path.isfile(caminho_config_arquivo):
             config = json.load(open(caminho_config_arquivo))
-
             arquivos = list()
+
             # Pega o nome dos arquivos importados na config
             try:
                 for nome_arquivo in config["importar"]["arquivo"]:
@@ -159,7 +159,15 @@ def pegar_playlists():
 
 def pegar_musica(musica_info):
     musica = sp.track(track_id=musica_info["url-spotify"])
-    baixar_musicas(musica, musica_info["url-youtube"])
+    url = None
+
+    # Permite que não seja necessário escolher um link do youtube
+    try:
+        url = musica_info["url-youtube"]
+    except:
+        pass
+
+    baixar_musicas(musica, url)
 
 def baixar_musicas(musica, url_youtube = None, playlist = False):
     nome_artista = musica['artists'][0]['name']
