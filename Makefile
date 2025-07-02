@@ -1,3 +1,6 @@
+# Feito para ser rodado com "make"
+make: setup build
+
 setup:
 	@echo "Criando o ambiente virtual"
 	@python -m venv venv

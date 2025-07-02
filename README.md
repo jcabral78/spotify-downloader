@@ -19,6 +19,7 @@ A configuração é feita por um arquivo json.
 - imagens: Usado para determinar se capas de álbuns vão ou não ser instaladas.
 - musica: Usado para instalar músicas separadas e selecionar qual vídeo do youtube deve ser usado.
 - album: Usado para instalar álbuns automaticamente.
+- importar: Usado para importar arquivos e diretórios
 
 ### Exemplo de Configuração
 
@@ -39,7 +40,17 @@ A configuração é feita por um arquivo json.
                 "nome": "Toxicity",
                 "url": "https://open.spotify.com/intl-pt/album/6jWde94ln40epKIQCd8XUh"
             }
-        ]
+        ],
+
+        "importar": {
+            "arquivo": [
+                "audioslave.json"
+            ],
+    
+            "diretorio": [
+                "artistas"
+            ]
+        }
     }
 
 ## Instalação
@@ -60,8 +71,7 @@ Após instalar as dependências, vá para o terminal e siga estes passos para a 
     cd spotify-downloader
 
     # Instalar o projeto (talvez seja necessário rodar "make install" com sudo)
-    make setup
-    make build
+    make
     make install
 
 Para mais informações nos comandos disponíveis com make, use `make help`.
