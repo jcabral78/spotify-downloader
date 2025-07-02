@@ -17,38 +17,56 @@ def abrir_config():
     global config_api
     global sp
 
-    caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/config.json"
-    caminho_config_api = f"{os.environ['HOME']}/.config/spotify-downloader/api.json"
+    caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/"
+    caminho_config_arquivo = caminho_config + "config.json"
+    caminho_config_api = caminho_config + "api.json"
     
     # Abre o arquivo de configuração
     while True:
-        if os.path.isfile(caminho_config):
-            config = json.load(open(caminho_config))
+        if os.path.isfile(caminho_config_arquivo):
+            config = json.load(open(caminho_config_arquivo))
 
             arquivos = list()
-            for i in config["importar"]["arquivo"]:
-                arquivos.append(i)
+            # Pega o nome dos arquivos importados na config
+            try:
+                for nome_arquivo in config["importar"]["arquivo"]:
+                    arquivos.append(nome_arquivo)
+            except:
+                pass
 
-            for i in os.listdir(f"{os.environ['HOME']}/.config/spotify-downloader/{config['importar']['diretorio'][0]}"):
-                arquivos.append(f"{config["importar"]["diretorio"][0]}/{i}")
+            # Pega o nome dos diretórios importados na config
+            try:
+                for i1 in range(len(config["importar"]["diretorio"])):
+                    for i2, nome_arquivo_em_dir in enumerate(os.listdir(caminho_config + config["importar"]["diretorio"][i1])):
+                        arquivos.append(f"{config['importar']['diretorio'][i1]}/{nome_arquivo_em_dir}")
+            except:
+                pass
 
-            for nome_arquivo in config["importar"]["arquivo"] and arquivos:
-                a = json.load(open(f"{os.environ['HOME']}/.config/spotify-downloader/{nome_arquivo}"))
-                try:
-                    for i in a["musica"]:
-                        config["musica"].append(i)
-                except:
-                    pass
+            # Adiciona os arquivos importados para o dicionário "config"
+            if len(arquivos) != 0:
+                # Adiciona "musica" e "album" à config
+                if not "musica" in config:
+                    config["musica"] = []
+                if not "album" in config:
+                    config["album"] = []
 
-                try:
-                    for i in a["album"]:
-                        config["album"].append(i)
-                except:
-                    pass
+                for nome_arquivo in arquivos:
+                    modulo_config = json.load(open(caminho_config + nome_arquivo))
+                    try:
+                        for musica in modulo_config["musica"]:
+                            config["musica"].append(musica)
+                    except:
+                        pass
+    
+                    try:
+                        for album in modulo_config["album"]:
+                            config["album"].append(album)
+                    except:
+                        pass
+
             break
         else:
-            criar_config(caminho_config)
-
+            criar_config(caminho_config_arquivo)
 
     # Abre o arquivo de configuração da API
     while True:
@@ -70,7 +88,7 @@ def criar_config(caminho_config):
         os.makedirs(caminho_config.removesuffix("/config.json"))
 
     config_padrao = {
-        "navegador": "",
+        "navegador": "firefox",
         "imagens": False
     }
 
@@ -96,7 +114,6 @@ def criar_config_api(caminho_config_api):
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config_api}")
-
 
 def pegar_album(album_url):
     album = sp.album(album_id=album_url)
