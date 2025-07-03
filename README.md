@@ -13,7 +13,7 @@ OBS: Todas as músicas são instaladas com os metadados importantes (título, ar
 
 A ferramenta pode rodar em quatro opções diferentes: *config*, *config_api*, *álbum* e *normal*.
 
-### Config '-c'
+### Config `-c`
 
 Cria a configuração.
 
@@ -25,7 +25,7 @@ Cria a configuração.
 
 Para mais informações, leia [Configuração](#configuração).
 
-### Config-API '-C'
+### Config-API `-C`
 
 Cria a configuração da API.
 
@@ -34,7 +34,7 @@ Cria a configuração da API.
 
 Para mais informações, leia [Setup da API](#setup-da-api).
 
-### Álbum '-a'
+### Álbum `-a`
 
 Instala um álbum.
 
