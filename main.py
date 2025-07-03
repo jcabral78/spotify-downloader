@@ -3,32 +3,32 @@ import os
 import json
 import lib
 
-caminho_config_api = f"{os.environ['HOME']}/.config/spotify-downloader/api.json"
-caminho_config_arquivo = f"{os.environ['HOME']}/.config/spotify-downloader/config.json"
-
 # Inicialização do parser
 parser = argparse.ArgumentParser(prog = "spotify-downloader",
                                  description = "Uma ferramenta CLI que automatiza a instalação e organização de playlists locais usando o spotify.")
 
 # Criação e configuração da flag "config"
+parser.add_argument("-c", "--config", nargs = 2,
+                    help = "Criar a configuração", metavar = ("navegador", "imagens"))
+
+# Criação e configuração da flag "config-api"
 parser.add_argument("-C", "--config-api", type = ascii,
                     nargs = 2, help = "Criar a configuração da API",
                     metavar = ("client_id", "client_secret"))
 
-parser.add_argument("-c", "--config", nargs = 2,
-                    help = "Criar a configuração", metavar = ("navegador", "imagens"))
 
 # Criação e configuração da flag "album"
 parser.add_argument("-a", "--album", type = ascii,
                     help = "Baixar álbuns", metavar = "album_url")
 
+# Processamento dos argumentos
 args = parser.parse_args()
 
 if args.config_api != None: 
-    lib.criar_config_api(caminho_config_api, args.config_api[0].replace("'", ""), args.config_api[1].replace("'", ""))
+    lib.criar_config_api(args.config_api[0].replace("'", ""), args.config_api[1].replace("'", ""))
 
 if args.config != None:
-    if args.config[0].lower() in ("nenhum", "none"):
+    if args.config[0].lower() in ("nenhum", "null", "none"):
         args.config[0] = None
     
     if args.config[1].lower() in ("sim", "true"):
@@ -36,7 +36,7 @@ if args.config != None:
     elif args.config[1].lower() in ("nao", "não", "false"):
         args.config[1] = False
 
-    lib.criar_config(caminho_config_arquivo, args.config[0], args.config[1])
+    lib.criar_config(args.config[0], args.config[1])
 
 lib.abrir_config()
 lib.criar_pastas()

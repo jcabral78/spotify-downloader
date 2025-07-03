@@ -15,7 +15,6 @@ def criar_pastas():
 
 def abrir_config():
     global config
-    global config_api
     global sp
 
     caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/"
@@ -28,6 +27,7 @@ def abrir_config():
             config = json.load(open(caminho_config_arquivo))
 
             arquivos = list()
+
             # Pega o nome dos arquivos importados na config
             try:
                 for nome_arquivo in config["importar"]["arquivo"]:
@@ -87,23 +87,25 @@ def abrir_config():
                                                    scope="playlist-read-private",
                                                    cache_path=f"{os.environ['HOME']}/.cache/spotifyAPItoken"))
 
-def criar_config(caminho_config, navegador, imagens):
+def criar_config(navegador, imagens):
+    caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/config.json"
     if not os.path.isdir(caminho_config.removesuffix("/config.json")):
         os.makedirs(caminho_config.removesuffix("/config.json"))
 
-    config_dicionario = {
+    config_principal = {
         "navegador": navegador,
         "imagens": imagens
     }
 
     config_arquivo = open(caminho_config, "w")
-    config_arquivo.write(json.dumps(config_dicionario, indent=4))
+    config_arquivo.write(json.dumps(config_principal, indent=4))
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config}")
     sys.exit(0)
 
-def criar_config_api(caminho_config_api, client_id, client_secret):
+def criar_config_api(client_id, client_secret):
+    caminho_config_api = f"{os.environ['HOME']}/.config/spotify-downloader/api.json"
     config_api = {
         "client_id": client_id,
         "client_secret": client_secret
