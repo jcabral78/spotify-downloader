@@ -5,6 +5,7 @@ from mutagen.id3 import ID3, TIT2, TPE1, TALB, TDRC, TRCK, APIC
 import os
 import json
 import requests
+import sys
 
 def criar_pastas():
     if not os.path.isdir(f"{os.environ['HOME']}/Músicas/Artistas"):
@@ -14,7 +15,6 @@ def criar_pastas():
 
 def abrir_config():
     global config
-    global config_api
     global sp
 
     caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/"
@@ -66,7 +66,9 @@ def abrir_config():
 
             break
         else:
-            criar_config(caminho_config_arquivo)
+            print("A configuração não foi criada")
+            sys.exit(0)
+
 
     # Abre o arquivo de configuração da API
     while True:
@@ -74,7 +76,8 @@ def abrir_config():
             config_api = json.load(open(caminho_config_api))
             break
         else:
-            criar_config_api(caminho_config_api)
+            print("A configuração da API não foi criada")
+            sys.exit(0)
 
     # Conecta com a API
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
@@ -83,27 +86,25 @@ def abrir_config():
                                                    scope="playlist-read-private",
                                                    cache_path=f"{os.environ['HOME']}/.cache/spotifyAPItoken"))
 
-def criar_config(caminho_config):
+def criar_config(navegador, imagens):
+    caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/config.json"
     if not os.path.isdir(caminho_config.removesuffix("/config.json")):
         os.makedirs(caminho_config.removesuffix("/config.json"))
 
-    config_padrao = {
-        "navegador": "firefox",
-        "imagens": False
+    config_principal = {
+        "navegador": navegador,
+        "imagens": imagens
     }
 
     config_arquivo = open(caminho_config, "w")
-    config_arquivo.write(json.dumps(config_padrao, indent=4))
+    config_arquivo.write(json.dumps(config_principal, indent=4))
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config}")
-    print("Edite o arquivo para selecionar o seu navegador")
-    exit(0)
+    sys.exit(0)
 
-def criar_config_api(caminho_config_api):
-    client_id = input("Escreva o client id: ")
-    client_secret = input("Escreva o client secret: ")
-
+def criar_config_api(client_id, client_secret):
+    caminho_config_api = f"{os.environ['HOME']}/.config/spotify-downloader/api.json"
     config_api = {
         "client_id": client_id,
         "client_secret": client_secret
@@ -114,6 +115,7 @@ def criar_config_api(caminho_config_api):
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config_api}")
+    sys.exit(0)
 
 def pegar_album(album_url):
     album = sp.album(album_id=album_url)
@@ -217,10 +219,12 @@ def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
             'preferredcodec': 'mp3',
             'preferredquality': '320'
             }],
-        'cookiesfrombrowser': (config["navegador"],),
         'outtmpl': f'{caminho_arquivo}.%(ext)s',
         'quiet': 'true'
     }
+
+    if config["navegador"] != None:
+        ydl_opts['cookiesfrombrowser'] = (config["navegador"],)
 
     # Query de busca
     query = f"ytsearch: {musica['name']} {musica['artists'][0]['name']}"
@@ -236,7 +240,7 @@ def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
             yt_dlp.YoutubeDL(ydl_opts).download([query])
         # Faz com que seja possível forçar a interrupção do programa
         except KeyboardInterrupt:
-            exit(0)
+            sys.exit(0)
         except:
             print("     Erro ao baixar a música, tentando novamente")
         else:
@@ -256,7 +260,7 @@ def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
                 audio.add(APIC(encoding = 3, mime = 'image/jpeg', type = 3, data = capa_album))
         # Faz com que seja possível forçar a interrupção do programa
         except KeyboardInterrupt:
-            exit(0)
+            sys.exit(0)
         except:
             print("     Erro na adição dos metadados, tentando novamente")
         else:

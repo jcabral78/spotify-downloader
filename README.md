@@ -1,6 +1,6 @@
 # spotify-downloader
 
-Um aplicativo que automatiza a instalação e organização de playlists locais usando o spotify. Atualmente só possui suporte para Linux.
+Uma ferramenta CLI que automatiza a instalação e organização de playlists locais usando o spotify. Atualmente só possui suporte para Linux.
 
 ## Features
 
@@ -9,14 +9,58 @@ Um aplicativo que automatiza a instalação e organização de playlists locais 
 
 OBS: Todas as músicas são instaladas com os metadados importantes (título, artista, etc) já inseridos.
 
+## Utilização
+
+A ferramenta pode rodar em quatro opções diferentes: *config*, *config_api*, *álbum* e *normal*.
+
+### Config `-c`
+
+Cria a configuração.
+
+    # Não define nenhum navegador e não instala imagens
+    spotify-downloader -c nenhum nao
+
+    # Define o navegador como "firefox" e instala imagens
+    spotify-downloader -c firefox sim
+
+Para mais informações, leia [Configuração](#configuração).
+
+### Config-API `-C`
+
+Cria a configuração da API.
+
+    # Define client_id e client_secret
+    spotify-downloader -C *client_id* *client_secret*
+
+Para mais informações, leia [Setup da API](#setup-da-api).
+
+### Álbum `-a`
+
+Instala um álbum.
+
+    # Instala o álbum "Dopethrone"
+    spotify-downloader -a https://open.spotify.com/intl-pt/album/2ntG8GB5e2RuOYkSmBo1ij?si=k-m2WqJkTrqCyGWXLH8-tw
+
+### Normal
+
+O modo normal da ferramenta. Instala músicas separadas, álbuns definidos na configuração e playlists.
+
+    # Para usar a ferramenta no modo normal, basta usá-la sem nenhuma flag
+    spotify-downloader
+
 ## Configuração
 
 A configuração é feita por um arquivo json.
 
 ### Opções
 
+<<<<<<< HEAD
 - navegador: Escreva o nome do seu navegador (chrome, firefox, etc) para a coleta de cookies.
 - imagens: Usado para determinar se capas de álbuns vão ou não ser instaladas.
+=======
+- navegador: Escreva o nome do seu navegador (chrome, firefox, etc) para instalar conteúdo com restrição de idade, ou "null" se não quiser fazer a coleta de cookies.
+- imagens: Usado para determinar se capas de álbuns vão ou não ser instaladas (true ou false).
+>>>>>>> update
 - musica: Usado para instalar músicas separadas.
     - url-spotify: Link da música no spotify.
     - url-youtube: Link do vídeo que será usado para o download no youtube (opcional).
@@ -29,7 +73,7 @@ A configuração é feita por um arquivo json.
 ### Exemplo de Configuração
 
     {
-        "navegador": "firefox",
+        "navegador": null,
         "imagens": false,
     
         "musica": [
@@ -83,4 +127,4 @@ Para mais informações nos comandos disponíveis com make, use `make help`.
 
 ### Setup da API
 
-Vá para https://developer.spotify.com e crie um aplicativo no Dashboard. Após criá-lo, adicione "http://127.0.0.1:3000" no Redirect URI. O projeto vai demandar o Client ID e o Client Secret.
+Vá para https://developer.spotify.com e crie um aplicativo no Dashboard. Após criá-lo, adicione "http://127.0.0.1:3000" no Redirect URI. Será necessário definir o Client ID e o Client Secret usando a flag `-C`, para mais informações em como usá-la, leia [Utilização](#utilização).
