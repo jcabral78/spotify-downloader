@@ -122,4 +122,4 @@ Para mais informações nos comandos disponíveis com make, use `make help`.
 
 ### Setup da API
 
-Vá para https://developer.spotify.com e crie um aplicativo no Dashboard. Após criá-lo, adicione "http://127.0.0.1:3000" no Redirect URI. Será necessário definir o Client ID e o Client Secret usando a flag '-C', para mais informações em como usá-la, leia [Utilização](#utilização).
+Vá para https://developer.spotify.com e crie um aplicativo no Dashboard. Após criá-lo, adicione "http://127.0.0.1:3000" no Redirect URI. Será necessário definir o Client ID e o Client Secret usando a flag `-C`, para mais informações em como usá-la, leia [Utilização](#utilização).
