@@ -54,13 +54,8 @@ A configuração é feita por um arquivo json.
 
 ### Opções
 
-<<<<<<< HEAD
-- navegador: Escreva o nome do seu navegador (chrome, firefox, etc) para a coleta de cookies.
-- imagens: Usado para determinar se capas de álbuns vão ou não ser instaladas.
-=======
 - navegador: Escreva o nome do seu navegador (chrome, firefox, etc) para instalar conteúdo com restrição de idade, ou "null" se não quiser fazer a coleta de cookies.
 - imagens: Usado para determinar se capas de álbuns vão ou não ser instaladas (true ou false).
->>>>>>> update
 - musica: Usado para instalar músicas separadas.
     - url-spotify: Link da música no spotify.
     - url-youtube: Link do vídeo que será usado para o download no youtube (opcional).
