@@ -74,7 +74,8 @@ def abrir_config():
             config_api = json.load(open(caminho_config_api))
             break
         else:
-            criar_config_api(caminho_config_api)
+            print("A configuração da API não foi criada")
+            exit(0)
 
     # Conecta com a API
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
@@ -97,13 +98,8 @@ def criar_config(caminho_config):
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config}")
-    print("Edite o arquivo para selecionar o seu navegador")
-    exit(0)
 
-def criar_config_api(caminho_config_api):
-    client_id = input("Escreva o client id: ")
-    client_secret = input("Escreva o client secret: ")
-
+def criar_config_api(caminho_config_api, client_id, client_secret):
     config_api = {
         "client_id": client_id,
         "client_secret": client_secret
@@ -114,6 +110,7 @@ def criar_config_api(caminho_config_api):
     config_arquivo.close()
 
     print(f"Configuração criada em: {caminho_config_api}")
+    exit(0)
 
 def pegar_album(album_url):
     album = sp.album(album_id=album_url)
