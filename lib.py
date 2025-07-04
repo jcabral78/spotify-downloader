@@ -10,8 +10,8 @@ import sys
 # Checa se o sistema é Windows ou Linux e define variáveis globais
 def checar_sistema():
     global caminho_inicio
-    global caminho_config_api
-    global caminho_config_arquivo
+    global caminho_config
+    global caminho_cache
 
     try:
         caminho_inicio = os.environ["%USERPROFILE%"]
@@ -29,28 +29,28 @@ def criar_config_api(client_id, client_secret):
         "client_secret": client_secret
     }
 
-    config_arquivo = open(caminho_config_api, "w")
+    config_arquivo = open(caminho_config + "api.json", "w")
     config_arquivo.write(json.dumps(config_api, indent=4))
     config_arquivo.close()
 
-    print(f"Configuração criada em: {caminho_config_api}")
+    print(f"Configuração criada em: {caminho_config}api.json")
     sys.exit(0)
 
 
 def criar_config(os, navegador, imagens):
-    if not os.path.isdir(caminho_config_arquivo.removesuffix("/config.json")):
-        os.makedirs(caminho_config_arquivo.removesuffix("/config.json"))
+    if not os.path.isdir(caminho_config):
+        os.makedirs(caminho_config)
 
     config_principal = {
         "navegador": navegador,
         "imagens": imagens
     }
 
-    config_arquivo = open(caminho_config_arquivo, "w")
+    config_arquivo = open(caminho_config + "config.json", "w")
     config_arquivo.write(json.dumps(config_principal, indent=4))
     config_arquivo.close()
 
-    print(f"Configuração criada em: {caminho_config_arquivo}")
+    print(f"Configuração criada em: {caminho_config}config.json")
     sys.exit(0)
 
 
@@ -58,13 +58,10 @@ def abrir_config():
     global sp
     global config
 
-    caminho_config_api = caminho_config + "api.json"
-    caminho_config_arquivo = caminho_config + "config.json"
-
     # Abre o arquivo de configuração da API
     while True:
-        if os.path.isfile(caminho_config_api):
-            config_api = json.load(open(caminho_config_api))
+        if os.path.isfile(caminho_config + "api.json"):
+            config_api = json.load(open(caminho_config + "api.json"))
             break
         else:
             print("A configuração da API não foi criada")
@@ -79,8 +76,8 @@ def abrir_config():
     
     # Abre o arquivo de configuração
     while True:
-        if os.path.isfile(caminho_config_arquivo):
-            config = json.load(open(caminho_config_arquivo))
+        if os.path.isfile(caminho_config + "config.json"):
+            config = json.load(open(caminho_config + "config.json"))
             arquivos = list()
 
             # Pega o nome dos arquivos importados na config
