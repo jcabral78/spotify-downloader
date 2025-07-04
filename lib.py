@@ -138,7 +138,8 @@ def pegar_album(album_url):
     for musica in album_faixas['items']:
         musica['album'] = {
             "name": album['name'],
-            "release_date": album['release_date']
+            "release_date": album['release_date'],
+            "images": [{"url": album['images'][0]['url']}]
         }
         baixar_musicas(musica)
 
@@ -206,7 +207,7 @@ def baixar_musicas(musica, url_youtube = None, playlist = False):
         # Pega a capa do álbum
         capa_album = None
         if config["imagens"] == True:
-            capa_album = requests.get(album['images'][0]['url']).content
+            capa_album = requests.get(musica['album']['images'][0]['url']).content
 
         baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube)
 
