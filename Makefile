@@ -17,9 +17,6 @@ install:
 	@echo "Instalando o projeto"
 	@cp -f ./dist/spotify-downloader /usr/local/bin/
 
-run:
-	@./venv/bin/python main.py
-
 clean:
 	@echo "Limpando o projeto"
 	@rm -rf __pycache__
