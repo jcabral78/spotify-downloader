@@ -1,3 +1,9 @@
+ifdef ${OS}
+	local_instalar = ${ProgramFiles}
+else
+	local_instalar = /usr/local/bin
+endif
+
 # Feito para ser rodado com "make"
 make: setup build
 
@@ -15,7 +21,7 @@ build:
 
 install:
 	@echo "Instalando o projeto"
-	@cp -f ./dist/spotify-downloader /usr/local/bin/
+	@cp -f ./dist/spotify-downloader ${local_instalar}
 
 clean:
 	@echo "Limpando o projeto"

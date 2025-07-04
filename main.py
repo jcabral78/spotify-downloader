@@ -1,6 +1,7 @@
 import argparse
 import os
 import json
+import sys
 import lib
 
 lib.checar_sistema()
@@ -32,16 +33,29 @@ if args.config_api != None:
 if args.config != None:
     if args.config[0].lower() in ("nenhum", "null", "none"):
         args.config[0] = None
+    else:
+        args.config[0] = args.config[0].lower().replace("'", "")
     
     if args.config[1].lower() in ("sim", "true"):
         args.config[1] = True
     elif args.config[1].lower() in ("nao", "não", "false"):
         args.config[1] = False
+    else:
+        print("Erro no input")
+        sys.exit(0)
 
     lib.criar_config(args.config[0], args.config[1])
 
 lib.abrir_config()
 lib.criar_pastas()
+
+if not "navegador" in lib.config:
+    print("Erro na config: navegador")
+    sys.exit(0)
+
+if not "imagens" in lib.config:
+    print("Erro na config: imagens")
+    sys.exit(0)
 
 if args.album != None:
     lib.pegar_album(args.album.replace("'", ""))
