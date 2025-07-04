@@ -1,6 +1,6 @@
 # spotify-downloader
 
-Uma ferramenta CLI que automatiza a instalação e organização de playlists locais usando o spotify. Atualmente só possui suporte para Linux.
+Uma ferramenta CLI que automatiza a instalação e organização de playlists locais usando o spotify.
 
 ## Features
 
@@ -11,7 +11,7 @@ OBS: Todas as músicas são instaladas com os metadados importantes (título, ar
 
 ## Utilização
 
-A ferramenta pode rodar em quatro opções diferentes: *config*, *config_api*, *álbum* e *normal*.
+A ferramenta pode rodar em quatro modos diferentes: *config*, *config_api*, *álbum* e *normal*.
 
 ### Config `-c`
 
