@@ -3,6 +3,8 @@ import os
 import json
 import lib
 
+lib.checar_sistema()
+
 # Inicialização do parser
 parser = argparse.ArgumentParser(prog = "spotify-downloader",
                                  description = "Uma ferramenta CLI que automatiza a instalação e organização de playlists locais usando o spotify.")

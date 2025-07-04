@@ -7,19 +7,75 @@ import json
 import requests
 import sys
 
-def criar_pastas():
-    if not os.path.isdir(f"{os.environ['HOME']}/Músicas/Artistas"):
-        os.makedirs(f"{os.environ['HOME']}/Músicas/Artistas")
-    if not os.path.isdir(f"{os.environ['HOME']}/Músicas/Playlists"):
-        os.makedirs(f"{os.environ['HOME']}/Músicas/Playlists")
+# Checa se o sistema é Windows ou Linux e define variáveis globais
+def checar_sistema():
+    global caminho_inicio
+    global caminho_config_api
+    global caminho_config_arquivo
+
+    try:
+        caminho_inicio = os.environ["%USERPROFILE%"]
+        caminho_config = f"{caminho_inicio}/Músicas/Configurações/"
+        caminho_cache = f"{caminho_inicio}/Músicas/Cache/spotifyAPItoken"
+    except:
+        caminho_inicio = os.environ["HOME"]
+        caminho_config = f"{caminho_inicio}/.config/spotify-downloader/"
+        caminho_cache = f"{caminho_inicio}/.cache/spotifyAPItoken"
+
+
+def criar_config_api(client_id, client_secret):
+    config_api = {
+        "client_id": client_id,
+        "client_secret": client_secret
+    }
+
+    config_arquivo = open(caminho_config_api, "w")
+    config_arquivo.write(json.dumps(config_api, indent=4))
+    config_arquivo.close()
+
+    print(f"Configuração criada em: {caminho_config_api}")
+    sys.exit(0)
+
+
+def criar_config(os, navegador, imagens):
+    if not os.path.isdir(caminho_config_arquivo.removesuffix("/config.json")):
+        os.makedirs(caminho_config_arquivo.removesuffix("/config.json"))
+
+    config_principal = {
+        "navegador": navegador,
+        "imagens": imagens
+    }
+
+    config_arquivo = open(caminho_config_arquivo, "w")
+    config_arquivo.write(json.dumps(config_principal, indent=4))
+    config_arquivo.close()
+
+    print(f"Configuração criada em: {caminho_config_arquivo}")
+    sys.exit(0)
+
 
 def abrir_config():
-    global config
     global sp
+    global config
 
-    caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/"
-    caminho_config_arquivo = caminho_config + "config.json"
     caminho_config_api = caminho_config + "api.json"
+    caminho_config_arquivo = caminho_config + "config.json"
+
+    # Abre o arquivo de configuração da API
+    while True:
+        if os.path.isfile(caminho_config_api):
+            config_api = json.load(open(caminho_config_api))
+            break
+        else:
+            print("A configuração da API não foi criada")
+            sys.exit(0)
+
+    # Conecta com a API
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
+                                                   client_secret=config_api["client_secret"],
+                                                   redirect_uri="http://127.0.0.1:3000",
+                                                   scope="playlist-read-private",
+                                                   cache_path=caminho_cache))
     
     # Abre o arquivo de configuração
     while True:
@@ -36,9 +92,9 @@ def abrir_config():
 
             # Pega o nome dos diretórios importados na config
             try:
-                for i1 in range(len(config["importar"]["diretorio"])):
-                    for i2, nome_arquivo_em_dir in enumerate(os.listdir(caminho_config + config["importar"]["diretorio"][i1])):
-                        arquivos.append(f"{config['importar']['diretorio'][i1]}/{nome_arquivo_em_dir}")
+                for i in range(len(config["importar"]["diretorio"])):
+                    for nome_arquivo_em_dir in os.listdir(caminho_config + config["importar"]["diretorio"][i]):
+                        arquivos.append(f"{config['importar']['diretorio'][i]}/{nome_arquivo_em_dir}")
             except:
                 pass
 
@@ -70,52 +126,12 @@ def abrir_config():
             sys.exit(0)
 
 
-    # Abre o arquivo de configuração da API
-    while True:
-        if os.path.isfile(caminho_config_api):
-            config_api = json.load(open(caminho_config_api))
-            break
-        else:
-            print("A configuração da API não foi criada")
-            sys.exit(0)
+def criar_pastas():
+    if not os.path.isdir(f"{caminho_inicio}/Músicas/Artistas"):
+        os.makedirs(f"{caminho_inicio}/Músicas/Artistas")
+    if not os.path.isdir(f"{caminho_inicio}/Músicas/Playlists"):
+        os.makedirs(f"{caminho_inicio}/Músicas/Playlists")
 
-    # Conecta com a API
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
-                                                   client_secret=config_api["client_secret"],
-                                                   redirect_uri="http://127.0.0.1:3000",
-                                                   scope="playlist-read-private",
-                                                   cache_path=f"{os.environ['HOME']}/.cache/spotifyAPItoken"))
-
-def criar_config(navegador, imagens):
-    caminho_config = f"{os.environ['HOME']}/.config/spotify-downloader/config.json"
-    if not os.path.isdir(caminho_config.removesuffix("/config.json")):
-        os.makedirs(caminho_config.removesuffix("/config.json"))
-
-    config_principal = {
-        "navegador": navegador,
-        "imagens": imagens
-    }
-
-    config_arquivo = open(caminho_config, "w")
-    config_arquivo.write(json.dumps(config_principal, indent=4))
-    config_arquivo.close()
-
-    print(f"Configuração criada em: {caminho_config}")
-    sys.exit(0)
-
-def criar_config_api(client_id, client_secret):
-    caminho_config_api = f"{os.environ['HOME']}/.config/spotify-downloader/api.json"
-    config_api = {
-        "client_id": client_id,
-        "client_secret": client_secret
-    }
-
-    config_arquivo = open(caminho_config_api, "w")
-    config_arquivo.write(json.dumps(config_api, indent=4))
-    config_arquivo.close()
-
-    print(f"Configuração criada em: {caminho_config_api}")
-    sys.exit(0)
 
 def pegar_album(album_url):
     album = sp.album(album_id=album_url)
@@ -140,7 +156,7 @@ def pegar_playlists():
 
     for i in range(playlists_todas['total']):
         # Abre o arquivo da playlist
-        playlist_arquivo = open(f"{os.environ['HOME']}/Músicas/Playlists/{playlists_todas['items'][i]['name']}.m3u", "w")
+        playlist_arquivo = open(f"{caminho_inicio}/Músicas/Playlists/{playlists_todas['items'][i]['name']}.m3u", "w")
 
         # Retorna todas as músicas da playlist em uma lista
         playlist = sp.playlist_tracks(playlist_id[i])
@@ -159,6 +175,7 @@ def pegar_playlists():
 
         playlist_arquivo.close()
 
+
 def pegar_musica(musica_info):
     musica = sp.track(track_id=musica_info["url-spotify"])
     url = None
@@ -171,6 +188,7 @@ def pegar_musica(musica_info):
 
     baixar_musicas(musica, url)
 
+
 def baixar_musicas(musica, url_youtube = None, playlist = False):
     nome_artista = musica['artists'][0]['name']
     nome_album = musica['album']['name']
@@ -182,7 +200,7 @@ def baixar_musicas(musica, url_youtube = None, playlist = False):
     nome_musica = limpar_nome(nome_musica)
     nome_limpo = f"{nome_artista}/{nome_album}/{nome_musica}"
 
-    caminho_arquivo = f"{os.environ['HOME']}/Músicas/Artistas/{nome_limpo}"
+    caminho_arquivo = f"{caminho_inicio}/Músicas/Artistas/{nome_limpo}"
 
     # Checa se a música já foi instalada. Se não, baixa
     if not os.path.isfile(f"{caminho_arquivo}.mp3"):
@@ -199,6 +217,7 @@ def baixar_musicas(musica, url_youtube = None, playlist = False):
     if playlist == True:
         return caminho_arquivo
 
+
 def limpar_nome(nome):
     nome = nome.lower()
     nome = nome.replace(" ", "_")
@@ -209,6 +228,7 @@ def limpar_nome(nome):
     nome = nome.replace("'", "")
 
     return nome
+
 
 def baixar_mp3(musica, caminho_arquivo, capa_album, url_youtube):
     # Opções de download
