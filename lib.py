@@ -14,7 +14,7 @@ def checar_sistema():
     global caminho_cache
 
     try:
-        caminho_inicio = os.environ["%USERPROFILE%"]
+        caminho_inicio = os.environ["USERPROFILE"]
         caminho_config = f"{caminho_inicio}/Músicas/Configurações/"
         caminho_cache = f"{caminho_inicio}/Músicas/Cache/spotifyAPItoken"
     except:

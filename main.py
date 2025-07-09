@@ -68,11 +68,11 @@ else:
     except:
         pass
 
-    lib.pegar_playlists()
-
     # Baixar álbuns pela configuração
     try:
         for album_config in lib.config["album"]:
             lib.pegar_album(album_config["url"])
     except:
         pass
+
+    lib.pegar_playlists()

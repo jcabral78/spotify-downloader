@@ -1,6 +1,6 @@
 # spotify-downloader
 
-Uma ferramenta CLI que automatiza a instalação e organização de playlists locais usando o spotify.
+Uma ferramenta CLI que automatiza a instalação e organização de playlists locais usando o spotify. Para a utilização no Windows, é recomendado o uso do WSL.
 
 ## Features
 
