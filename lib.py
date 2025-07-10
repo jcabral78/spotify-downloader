@@ -6,6 +6,7 @@ import os
 import json
 import requests
 import sys
+import platform
 
 # Checa se o sistema é Windows ou Linux e define variáveis globais
 def checar_sistema():
@@ -13,14 +14,15 @@ def checar_sistema():
     global caminho_config
     global caminho_cache
 
-    try:
-        caminho_inicio = os.environ["USERPROFILE"]
-        caminho_config = f"{caminho_inicio}/Músicas/Configurações/"
-        caminho_cache = f"{caminho_inicio}/Músicas/Cache/spotifyAPItoken"
-    except:
+    if platform.system() == "Linux":
         caminho_inicio = os.environ["HOME"]
         caminho_config = f"{caminho_inicio}/.config/spotify-downloader/"
         caminho_cache = f"{caminho_inicio}/.cache/spotifyAPItoken"
+
+    elif platform.system() == "Windows":
+        caminho_inicio = os.environ["USERPROFILE"]
+        caminho_config = f"{caminho_inicio}/Músicas/Configurações/"
+        caminho_cache = f"{caminho_inicio}/Músicas/Cache/spotifyAPItoken"
 
 
 def criar_config_api(client_id, client_secret):

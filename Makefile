@@ -33,7 +33,5 @@ help:
 	@echo "	Instala as dependências de build e cria um binário do projeto"
 	@echo "make install:"
 	@echo "	Copia o binário para /usr/local/bin (talvez tenha que ser executado com sudo)"
-	@echo "make run:"
-	@echo "	Roda o projeto"
 	@echo "make clean:"
 	@echo "	Limpa a pasta do projeto"
