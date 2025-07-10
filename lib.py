@@ -25,6 +25,19 @@ def checar_sistema():
         caminho_cache = f"{caminho_inicio}/.cache/spotifyAPItoken"
 
 
+def criar_pastas():
+    if not os.path.isdir(f"{caminho_inicio}/Músicas/Artistas"):
+        os.makedirs(f"{caminho_inicio}/Músicas/Artistas")
+    if not os.path.isdir(f"{caminho_inicio}/Músicas/Playlists"):
+        os.makedirs(f"{caminho_inicio}/Músicas/Playlists")
+
+    if caminho_inicio == os.environ["USERPROFILE"]:
+        if not os.path.isdir(f"{caminho_inicio}/Músicas/Configurações"):
+            os.makedirs(f"{caminho_inicio}/Músicas/Configurações")
+        if not os.path.isdir(f"{caminho_inicio}/Músicas/Cache"):
+            os.makedirs(f"{caminho_inicio}/Músicas/Cache")
+
+
 def criar_config_api(client_id, client_secret):
     config_api = {
         "client_id": client_id,
@@ -154,13 +167,6 @@ def abrir_config():
         else:
             print("A configuração não foi criada")
             sys.exit(0)
-
-
-def criar_pastas():
-    if not os.path.isdir(f"{caminho_inicio}/Músicas/Artistas"):
-        os.makedirs(f"{caminho_inicio}/Músicas/Artistas")
-    if not os.path.isdir(f"{caminho_inicio}/Músicas/Playlists"):
-        os.makedirs(f"{caminho_inicio}/Músicas/Playlists")
 
 
 def pegar_album(album_url):

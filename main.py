@@ -5,6 +5,7 @@ import sys
 import lib
 
 lib.checar_sistema()
+lib.criar_pastas()
 
 # Inicialização do parser
 parser = argparse.ArgumentParser(prog = "spotify-downloader",
@@ -47,7 +48,6 @@ if args.config != None:
     lib.criar_config(args.config[0], args.config[1])
 
 lib.abrir_config()
-lib.criar_pastas()
 
 if not "navegador" in lib.config:
     print("Erro na config: navegador")
