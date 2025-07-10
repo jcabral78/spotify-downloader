@@ -14,15 +14,15 @@ def checar_sistema():
     global caminho_config
     global caminho_cache
 
-    if platform.system() == "Linux":
-        caminho_inicio = os.environ["HOME"]
-        caminho_config = f"{caminho_inicio}/.config/spotify-downloader/"
-        caminho_cache = f"{caminho_inicio}/.cache/spotifyAPItoken"
-
-    elif platform.system() == "Windows":
+    if platform.system().lower() == "windows" or platform.uname().release.lower() == "microsoft":
         caminho_inicio = os.environ["USERPROFILE"]
         caminho_config = f"{caminho_inicio}/Músicas/Configurações/"
         caminho_cache = f"{caminho_inicio}/Músicas/Cache/spotifyAPItoken"
+
+    elif platform.system().lower() == "linux":
+        caminho_inicio = os.environ["HOME"]
+        caminho_config = f"{caminho_inicio}/.config/spotify-downloader/"
+        caminho_cache = f"{caminho_inicio}/.cache/spotifyAPItoken"
 
 
 def criar_config_api(client_id, client_secret):
@@ -99,7 +99,7 @@ def abrir_config():
 
             # Adiciona os arquivos importados para o dicionário "config"
             if len(arquivos) != 0:
-                # Adiciona "musica" e "album" à config
+                # Adiciona "musica" e "album" à config se não existirem
                 if not "musica" in config:
                     config["musica"] = []
                 if not "album" in config:
