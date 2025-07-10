@@ -31,11 +31,14 @@ def criar_pastas():
     if not os.path.isdir(f"{caminho_inicio}/Músicas/Playlists"):
         os.makedirs(f"{caminho_inicio}/Músicas/Playlists")
 
-    if caminho_inicio == os.environ["USERPROFILE"]:
-        if not os.path.isdir(f"{caminho_inicio}/Músicas/Configurações"):
-            os.makedirs(f"{caminho_inicio}/Músicas/Configurações")
-        if not os.path.isdir(f"{caminho_inicio}/Músicas/Cache"):
-            os.makedirs(f"{caminho_inicio}/Músicas/Cache")
+    try:
+        if caminho_inicio == os.environ["USERPROFILE"]:
+            if not os.path.isdir(f"{caminho_inicio}/Músicas/Configurações"):
+                os.makedirs(f"{caminho_inicio}/Músicas/Configurações")
+            if not os.path.isdir(f"{caminho_inicio}/Músicas/Cache"):
+                os.makedirs(f"{caminho_inicio}/Músicas/Cache")
+    except:
+        pass
 
 
 def criar_config_api(client_id, client_secret):
