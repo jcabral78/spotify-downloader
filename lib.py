@@ -61,13 +61,11 @@ def abrir_config():
     global config
 
     # Abre o arquivo de configuração da API
-    while True:
-        if os.path.isfile(caminho_config + "api.json"):
-            config_api = json.load(open(caminho_config + "api.json"))
-            break
-        else:
-            print("A configuração da API não foi criada")
-            sys.exit(0)
+    if os.path.isfile(caminho_config + "api.json"):
+        config_api = json.load(open(caminho_config + "api.json"))
+    else:
+        print("A configuração da API não foi criada")
+        sys.exit(0)
 
     # Conecta com a API
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=config_api["client_id"],
@@ -77,15 +75,16 @@ def abrir_config():
                                                    cache_path=caminho_cache))
     
     # Abre o arquivo de configuração
-    while True:
-        if os.path.isfile(caminho_config + "config.json"):
-            config = json.load(open(caminho_config + "config.json"))
-            arquivos = list()
+    if os.path.isfile(caminho_config + "config.json"):
+        config = json.load(open(caminho_config + "config.json"))
+        arquivos = set()
+        arquivos_alt = set()
 
+        while True:
             # Pega o nome dos arquivos importados na config
             try:
                 for nome_arquivo in config["importar"]["arquivo"]:
-                    arquivos.append(nome_arquivo)
+                    arquivos.add(nome_arquivo)
             except:
                 pass
 
@@ -93,20 +92,36 @@ def abrir_config():
             try:
                 for i in range(len(config["importar"]["diretorio"])):
                     for nome_arquivo_em_dir in os.listdir(caminho_config + config["importar"]["diretorio"][i]):
-                        arquivos.append(f"{config['importar']['diretorio'][i]}/{nome_arquivo_em_dir}")
+                        arquivos.add(f"{config['importar']['diretorio'][i]}/{nome_arquivo_em_dir}")
             except:
                 pass
 
             # Adiciona os arquivos importados para o dicionário "config"
             if len(arquivos) != 0:
-                # Adiciona "musica" e "album" à config se não existirem
+                # Adiciona objetos à config se não existirem
                 if not "musica" in config:
-                    config["musica"] = []
+                    config["musica"] = list()
                 if not "album" in config:
-                    config["album"] = []
+                    config["album"] = list()
+                if not "arquivo" in config["importar"]:
+                    config["importar"]["arquivo"] = list()
+                if not "diretorio" in config["importar"]:
+                    config["importar"]["diretorio"] = list()
 
                 for nome_arquivo in arquivos:
                     modulo_config = json.load(open(caminho_config + nome_arquivo))
+                    try:
+                        for navegador in modulo_config["navegador"]:
+                            config["navegador"] = navegador
+                    except:
+                        pass
+
+                    try:
+                        for imagens in modulo_config["imagens"]:
+                            config["imagens"] = imagens
+                    except:
+                        pass
+
                     try:
                         for musica in modulo_config["musica"]:
                             config["musica"].append(musica)
@@ -119,7 +134,23 @@ def abrir_config():
                     except:
                         pass
 
-            break
+                    try:
+                        for arquivo in modulo_config["importar"]["arquivo"]:
+                            config["importar"]["arquivo"].append(arquivo)
+                    except:
+                        pass
+
+                    try:
+                        for diretorio in modulo_config["importar"]["diretorio"]:
+                            config["importar"]["diretorio"].append(diretorio)
+                    except:
+                        pass
+
+            if arquivos_alt == arquivos:
+                break
+            else:
+                arquivos_alt = arquivos.copy()
+                
         else:
             print("A configuração não foi criada")
             sys.exit(0)
